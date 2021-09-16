@@ -105,11 +105,10 @@ namespace SendGrid
         /// <summary>
         /// Converts string formatted response body to a Dictionary.
         /// </summary>
-        /// <param name="content">https://docs.microsoft.com/dotnet/api/system.net.http.httpcontent.</param>
         /// <returns>Dictionary object representation of HttpContent.</returns>
-        public virtual async Task<Dictionary<string, dynamic>> DeserializeResponseBodyAsync(HttpContent content)
+        public virtual async Task<Dictionary<string, dynamic>> DeserializeResponseBodyAsync()
         {
-            var stringContent = await content.ReadAsStringAsync().ConfigureAwait(false);
+            var stringContent = await this.body.ReadAsStringAsync().ConfigureAwait(false);
             var dsContent = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(stringContent);
             return dsContent;
         }
@@ -117,12 +116,11 @@ namespace SendGrid
         /// <summary>
         /// Converts string formatted response headers to a Dictionary.
         /// </summary>
-        /// <param name="content">https://docs.microsoft.com/dotnet/api/system.net.http.headers.httpresponseheaders.</param>
         /// <returns>Dictionary object representation of HttpResponseHeaders.</returns>
-        public virtual Dictionary<string, string> DeserializeResponseHeaders(HttpResponseHeaders content)
+        public virtual Dictionary<string, string> DeserializeResponseHeaders()
         {
             var dsContent = new Dictionary<string, string>();
-            foreach (var pair in content)
+            foreach (var pair in this.headers)
             {
                 dsContent.Add(pair.Key, pair.Value.First());
             }
